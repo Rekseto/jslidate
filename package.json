@@ -1,0 +1,35 @@
+{
+  "name": "jslidate",
+  "version": "0.0.1",
+  "description": "Library for JS validation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rekseto/jslidate.git"
+  },
+  "keywords": [
+    "Validation",
+    "JS"
+  ],
+  "author": "Rekseto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rekseto/jslidate/issues"
+  },
+  "homepage": "https://github.com/Rekseto/jslidate#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-copy": "^1.0.0",
+    "gulp-eslint": "^4.0.0",
+    "gulp-rename": "^1.2.2",
+    "pump": "^1.0.2",
+    "rollup": "^0.45.2",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.1.0",
+    "run-sequence": "^2.0.0"
+  }
+}
