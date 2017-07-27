@@ -7,9 +7,19 @@
 <body>
 
 
+<form action="/cos" method="get" class="form">
+
+    <input type="text" class="input">
+    <input type="text" class="input">
+    <input type="submit" value="submit">
+</form>
+
 <script src="../dist/jslidate.js"></script>
 <script>
-    const maxLength = length => value => value <= length;
-    const impForm = new jslidate([['key' , [maxLength(4)]]], ) </script>
+    // tests
+    const minLength = length => value => value.length >= length;
+    const maxLength = length => value => value.length <= length;
+    const impForm = new jslidate([[document.querySelectorAll('.input') , [maxLength(4), minLength(1)]]], document.querySelector('.form'));
+</script>
 </body>
 </html>

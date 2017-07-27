@@ -7,7 +7,7 @@ var gulpCopy = require('gulp-copy');
 const runSequence = require('run-sequence');
 
 gulp.task('lint', function () {
-    return gulp.src(['src/**/*.js', '!node_modules/**'])
+    return gulp.src(['dist/**/**', '!node_modules/**'])
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
