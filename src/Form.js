@@ -7,11 +7,7 @@ export default class Form {
     constructor ( targets , form ) {
         this.map = new Map (targets);
         this.form = form;
-        for (let [key, value] of this.map.entries ()) {
-            if (key instanceof Element || NodeList || HTMLCollection || Array) {
-                this.bindEvents (key , value);
-            }
-        }
+                this.bindEvents ();
     }
     
     validate ( el , rules ) {
@@ -33,26 +29,28 @@ export default class Form {
         
     }
     
-    bindEvents ( el , rules ) {
+    bindEvents ( ) {
         this.form.addEventListener ('submit' , e => {
-            if (el ) {
-                let counter = 0;
-                for (let i = 0; i < el.length; i++) {
-                    if (this.validate (el[ i ] , rules) === true) {
-                        counter++;
+            for (let [key, value] of this.map) {
+                if (key instanceof Array || key instanceof HTMLCollection || key instanceof NodeList) {
+                    let counter = 0;
+                    for (let i = 0; i < key.length; i++) {
+                        if (this.validate (key[ i ] , value) === true) {
+                            counter++;
+                        }
                     }
-                }
-                if (counter === el.length) {
-                } else {
+                    if ((counter === key.length) === false) {
                     e.preventDefault ();
-                    return false;
+                        return false;
+                    }
+        
                 }
-                
-            }
-            else if(el instanceof Element) {
-                if (this.validate (el , rules) === false) {
-                    e.preventDefault();
-                    return false;
+                 if (key instanceof Element) {
+                    
+                    if (this.validate (key , value) === false) {
+                        e.preventDefault ();
+                        return false;
+                    }
                 }
             }
         });
