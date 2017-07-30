@@ -4,9 +4,8 @@ JSLidate is libraray for JS validation
 
 ## Sample usage
 
-// TODO README.md
 
-Code below creates Form object that applies array for map with [element, [array of rules]]
+Code below creates Form object that applies map with [Element || NodeList || Array || HTMLCollection, [Array of rules]]
 
 ```javascript
     const impForm = new jslidate([[document.querySelectorAll('.input'), [minLength(1) , maxLength(5)]], [document.querySelector('.inpute'),  [maxLength(5)] ]], document.querySelector('.form'));
