@@ -21,7 +21,8 @@
     // tests
     const minLength = length => value => value.length >= length;
     const maxLength = length => value => value.length <= length;
-    const impForm = new jslidate([[document.querySelectorAll('.input'), [minLength(1) , maxLength(5)]], [document.querySelector('.inpute'),  [maxLength(5)] ]], document.querySelector('.form'));
+    const impForm = new jslidate([[document.querySelectorAll('.input'), [minLength(1) , maxLength(5)]], [document.querySelector('.inpute'),  [maxLength(5)] ]], document.querySelector('.form'), function (  ) {
+    });
 </script>
 </body>
 </html>

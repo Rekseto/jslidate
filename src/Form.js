@@ -4,10 +4,10 @@ export default class Form {
      *  @param {Element} targets.key - Element associated with rules
      *  @param {Array} targets.value - Array of rules
      */
-    constructor ( targets , form ) {
+    constructor ( targets , form , rejected = function ( ) { }) {
         this.map = new Map (targets);
         this.form = form;
-                this.bindEvents ();
+        this.bindEvents (rejected);
     }
     
     validate ( el , rules ) {
@@ -29,7 +29,7 @@ export default class Form {
         
     }
     
-    bindEvents ( ) {
+    bindEvents ( rejected ) {
         this.form.addEventListener ('submit' , e => {
             for (let [key, value] of this.map) {
                 if (key instanceof Array || key instanceof HTMLCollection || key instanceof NodeList) {
@@ -40,15 +40,17 @@ export default class Form {
                         }
                     }
                     if ((counter === key.length) === false) {
-                    e.preventDefault ();
+                        e.preventDefault ();
+                        rejected.call(key);
                         return false;
                     }
-        
+                    
                 }
-                 if (key instanceof Element) {
+                if (key instanceof Element) {
                     
                     if (this.validate (key , value) === false) {
                         e.preventDefault ();
+                        rejected.call(key);
                         return false;
                     }
                 }
