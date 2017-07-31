@@ -5,10 +5,23 @@ JSLidate is libraray for JS validation
 ## Sample usage
 
 
-Code below creates Form object that applies map with ([Element || NodeList || Array || HTMLCollection, [Array of rules]], Form element, optional rejected fnc)
+Code below creates Form object
 
 ```javascript
-    const impForm = new jslidate([[document.querySelectorAll('.input'), [minLength(1) , maxLength(5)]], [document.querySelector('.inpute'),  [maxLength(5)] ]], document.querySelector('.form'));
+       const impForm = new jslidate ({
+           inputs: [{
+               selector: '.input' ,
+               rules   : [minLength (1) , maxLength (5)] ,
+           } ,{
+               selector: '.inpute' ,
+               rules   : [minLength (2) , maxLength (19)] ,
+           } ] ,
+           form:{
+               selector: '.form',
+           }
+       },function () {
+       console.log('Form rejected');
+       });
 ```
 
 Rules are based on currying functions (sample functions are visible in RuleTypes.js file)

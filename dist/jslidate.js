@@ -10,9 +10,12 @@ class Form {
      *  @param {Element} targets.key - Element associated with rules
      *  @param {Array} targets.value - Array of rules
      */
-    constructor ( targets , form , rejected = function ( ) { }) {
-        this.map = new Map (targets);
-        this.form = form;
+    constructor ( obj , form , rejected = function ( ) { }) {
+        this.map = new Map ();
+        for(let i =0; i<obj.inputs.length; i++) {
+            this.map.set(document.querySelectorAll(obj.inputs[i].selector), obj.inputs[i].rules);
+        }
+        this.form = document.querySelector(obj.form.selector);
         this.bindEvents (rejected);
     }
     
