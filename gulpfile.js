@@ -13,12 +13,6 @@ gulp.task('lint', function () {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('build', function () {
-    return gulp
-        .src('dist/datatraffic.js')
-        .pipe(gulpCopy('test/app/static'));
-});
-
 gulp.task('watch', function () {
     gulp.watch('dist/', ['build']);
 });

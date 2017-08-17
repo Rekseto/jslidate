@@ -7,12 +7,14 @@
 <body>
 
 
-<form action="/cos" method="get" class="form">
+<form action="/test" method="get" class="form">
 
-    <label for="nazwa">max 4 min 1</label>
-    <input type="text" id="nazwa" class="input">
+    <label for="example1">First example (min 1, max 5)</label>
+    <input type="text" id="example1" class="input">
 
-    <input type="text" class="inpute">
+    <label for="example2">Second example (min 2, max 4)</label>
+    <input type="text" class="input2" id="example2">
+
     <input type="submit" value="submit">
 </form>
 
@@ -21,17 +23,20 @@
     // tests
     const minLength = length => value => value.length >= length;
     const maxLength = length => value => value.length <= length;
-    const impForm = new jslidate ({
+
+    const impForm = new JSLidate ({
         inputs: [{
             selector: '.input' ,
             rules   : [minLength (1) , maxLength (5)] ,
         } ,{
-            selector: '.inpute' ,
-            rules   : [minLength (2) , maxLength (19)] ,
+            selector: '.input2' ,
+            rules   : [minLength (2) , maxLength (4)] ,
         } ] ,
         form:{
             selector: '.form',
         }
+    }, function (  ) {
+        console.log('rejected');
     });
 </script>
 </body>

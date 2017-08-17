@@ -31,5 +31,8 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.1.0",
     "run-sequence": "^2.0.0"
+  },
+  "dependencies": {
+    "password-hash-and-salt": "^0.1.4"
   }
 }

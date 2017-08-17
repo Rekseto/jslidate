@@ -4,7 +4,7 @@ import globals from 'rollup-plugin-node-globals';
 export default {
     entry: 'src/Form',
     format: 'umd',
-    moduleName: 'jslidate',
+    moduleName: 'JSLidate',
     dest: 'dist/jslidate.js',
     plugins: [
       globals(),

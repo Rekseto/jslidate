@@ -1,16 +1,19 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(global.jslidate = factory());
+	(global.JSLidate = factory());
 }(this, (function () { 'use strict';
 
 class Form {
     /*
-     *  @param {Object} targets - map of objects
-     *  @param {Element} targets.key - Element associated with rules
-     *  @param {Array} targets.value - Array of rules
+     * Form constructor
+     *
+     *  @param {Object} obj - object that contains all of inputs and rules
+     *  @param {String} obj.inputs[i].selector - selector for Elements
+     *  @param {Array} obj.inputs[i].rules - Array of rules
+     *  @param {Function} rejected - function to call after reject
      */
-    constructor ( obj , form , rejected = function ( ) { }) {
+    constructor ( obj , rejected = function ( ) { }) {
         this.map = new Map ();
         for(let i =0; i<obj.inputs.length; i++) {
             this.map.set(document.querySelectorAll(obj.inputs[i].selector), obj.inputs[i].rules);
@@ -56,7 +59,6 @@ class Form {
                     
                 }
                 if (key instanceof Element) {
-                    
                     if (this.validate (key , value) === false) {
                         e.preventDefault ();
                         rejected.call(key);
