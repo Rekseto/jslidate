@@ -10,10 +10,10 @@
 <form action="/test" method="get" class="form">
 
     <label for="example1">First example (min 1, max 5)</label>
-    <input type="text" id="example1" class="input">
+    <input type="text" id="example1" class="input_1">
 
     <label for="example2">Second example (min 2, max 4)</label>
-    <input type="text" class="input2" id="example2">
+    <input type="text" class="input_2" id="example2">
 
     <input type="submit" value="submit">
 </form>
@@ -26,18 +26,16 @@
 
     const impForm = new JSLidate ({
         inputs: [{
-            selector: '.input' ,
+            selector: '.input_1' ,
             rules   : [minLength (1) , maxLength (5)] ,
-        } ,{
-            selector: '.input2' ,
+        }, {
+            selector: '.input_2' ,
             rules   : [minLength (2) , maxLength (4)] ,
-        } ] ,
+        }],
         form:{
             selector: '.form',
         }
-    }, function (  ) {
-        console.log('rejected');
-    });
+    }, () => console.log('Form rejected'));
 </script>
 </body>
 </html>
