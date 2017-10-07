@@ -1,61 +1,51 @@
 export default class Form {
-    /*
+    /**
      * Form constructor
-     *
-     *  @param {Object} obj - object that contains all of inputs and rules
-     *  @param {String} obj.inputs[i].selector - selector for Elements
-     *  @param {Array} obj.inputs[i].rules - Array of rules
-     *  @param {Function} rejected - function to call after reject
+     * @param {Array} inputs - array of selectors
+     * @param {String} inputs.selector - selector for Elements
+     * @param {Array} inputs.rules - Array of rules
+     * @param {Function} rejected - function to call after reject
+     * @memberof Form
      */
-    constructor ( obj , rejected = function ( ) { }) {
-        this.map = new Map ();
-        for(let i =0; i<obj.inputs.length; i++) {
-            this.map.set(document.querySelectorAll(obj.inputs[i].selector), obj.inputs[i].rules);
-        }
-        this.form = document.querySelector(obj.form.selector);
+    constructor ({ inputs, form }, rejected = () => {}) {
+        const map = new Map ();
+        const formNode = document.querySelector(form.selector);
+        Array.from(inputs)
+            .map(({ selector, rules }) => [ selector, rules ])
+            .forEach(([ selector, rules ]) =>
+                map.set(formNode.querySelectorAll(selector), rules));
+
+        this.map = map;
+        this.form = formNode;
         this.bindEvents (rejected);
     }
-    
-    validate ( el , rules ) {
-        let rulesLength = rules.length;
-        let counter = 0;
-        if (el instanceof Element || HTMLElement) {
-            let val = el.value;
-            for (let i = 0; i < rulesLength; i++) {
-                if (rules[ i ] (val)) {
-                    counter++;
-                }
-            }
-            if (counter === rulesLength) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        
+
+    validate ({ value }, rules) {
+        const matched = rules.filter(rule => rule(value));
+        return matched.length === rules.length;
     }
     
-    bindEvents ( rejected ) {
-        this.form.addEventListener ('submit' , e => {
-            for (let [key, value] of this.map) {
-                if (key instanceof Array || key instanceof HTMLCollection || key instanceof NodeList) {
-                    let counter = 0;
-                    for (let i = 0; i < key.length; i++) {
-                        if (this.validate (key[ i ] , value) === true) {
-                            counter++;
-                        }
-                    }
-                    if ((counter === key.length) === false) {
+    bindEvents (rejected) {
+        const { form, validate, map } = this;
+        form.addEventListener ('submit', (e) => {
+            for (const [value, rules] of map) {
+                if (value instanceof Array
+                || value instanceof HTMLCollection
+                || value instanceof NodeList) {
+                    const matched = Array.from(value)
+                        .filter(item => validate(item, rules));
+                        
+                    if (matched.length !== value.length) {
                         e.preventDefault ();
-                        rejected.call(key);
+                        rejected(value);
                         return false;
                     }
-                    
                 }
-                if (key instanceof Element) {
-                    if (this.validate (key , value) === false) {
+                if (value instanceof Element
+                || value instanceof HTMLElement) {
+                    if (!validate (value, rules)) {
                         e.preventDefault ();
-                        rejected.call(key);
+                        rejected(value);
                         return false;
                     }
                 }

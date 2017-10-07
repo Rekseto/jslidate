@@ -21,3 +21,7 @@ export const minLength = length => value => value.length >= length;
  * @returns {Boolean} - if value has passed the test function returns true
  */
 export const patternRule = regexObj => value => regexObj.test(value);
+
+const RuleTypes = { maxLength, minLength, patternRule };
+
+export default RuleTypes;
