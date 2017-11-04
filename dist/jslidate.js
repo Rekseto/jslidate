@@ -20,41 +20,46 @@ class Form {
             .map(({ selector, rules }) => [ selector, rules ])
             .forEach(([ selector, rules ]) =>
                 map.set(formNode.querySelectorAll(selector), rules));
-
         this.map = map;
         this.form = formNode;
+        this.errors = new Map ();
         this.bindEvents (rejected);
     }
 
     validate ({ value }, rules) {
-        const matched = rules.filter(rule => rule(value));
-        return matched.length === rules.length;
+        const nonMatched = rules.filter(rule => !rule(value));
+        return nonMatched.length === 0;
     }
-    
+
     bindEvents (rejected) {
         const { form, validate, map } = this;
         form.addEventListener ('submit', (e) => {
+            let valid;
+            const wrongFilled = [];
             for (const [value, rules] of map) {
                 if (value instanceof Array
                 || value instanceof HTMLCollection
                 || value instanceof NodeList) {
-                    const matched = Array.from(value)
-                        .filter(item => validate(item, rules));
-                        
-                    if (matched.length !== value.length) {
-                        e.preventDefault ();
-                        rejected(value);
-                        return false;
+                    const nonMatched = Array.from(value)
+                        .filter(item => !validate(item, rules));
+                    if (nonMatched.length > 0) {
+                        wrongFilled.push(nonMatched);
+                        valid = false;
                     }
                 }
                 if (value instanceof Element
                 || value instanceof HTMLElement) {
                     if (!validate (value, rules)) {
-                        e.preventDefault ();
-                        rejected(value);
-                        return false;
+                        wrongFilled = value;
+                        valid = false;
+
                     }
                 }
+            }
+            if (valid === false) {
+                e.preventDefault ();
+                rejected(wrongFilled);
+                return false;
             }
         });
     }

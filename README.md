@@ -16,10 +16,10 @@ const impForm = new JSLidate ({
     form:{
         selector: '.form',
     }
-}, () => console.log('Form rejected'));
+}, (wrongFilled) => console.log('Form rejected'));
 ```
-
-## Creating rules
+## API
+### Creating rules
 Rules are based on currying functions (sample functions are visible in RuleTypes.js file)
 
 Example:
@@ -34,6 +34,14 @@ var maxLenth = function(length) {
     }
 }
 ```
+### Callback function
+JSlidate object applies callback for wrong filled form.
+```javascript
+(wrongFilled) => console.log(wrongFilled);
+```
++ wrongFilled: Array
+   This contains an array of elements which did not get through the validation process.
+
 
 ## Contribution
 ### Install packages
