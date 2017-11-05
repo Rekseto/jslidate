@@ -1,60 +1,71 @@
+import EventListener from './eventListener';
 export default class Form {
     /**
      * Form constructor
-     * @param {Array} inputs - array of selectors
+     * @param {Object[]} inputs - array of selectors
      * @param {String} inputs.selector - selector for Elements
      * @param {Array} inputs.rules - Array of rules
      * @param {Function} rejected - function to call after reject
      * @memberof Form
      */
-    constructor ({ inputs, form }, rejected = () => {}) {
-        const map = new Map ();
+    constructor({ inputs, form }, rejected = () => { }, config = { alwaysCancelSubmit: true }) {
+        const map = new Map();
         const formNode = document.querySelector(form.selector);
         Array.from(inputs)
-            .map(({ selector, rules }) => [ selector, rules ])
-            .forEach(([ selector, rules ]) =>
+            .map(({ selector, rules }) => [selector, rules])
+            .forEach(([selector, rules]) =>
                 map.set(formNode.querySelectorAll(selector), rules));
+
         this.map = map;
+        this.config = config;
         this.form = formNode;
-        this.errors = new Map ();
-        this.bindEvents (rejected);
+        this.eventListener = new EventListener();
+        this.bindEvents(rejected);
     }
 
-    validate ({ value }, rules) {
-        const nonMatched = rules.filter(rule => !rule(value));
-        return nonMatched.length === 0;
+    validate({ value }, rules) {
+
+        return rules
+            .map(rule => rule(value))
+            .filter(({ validate }) => !validate)
+            .map(({ message }) => message)
+            .map(([message, pattern]) => `${message}: ${pattern}`);
     }
 
-    bindEvents (rejected) {
-        const { form, validate, map } = this;
-        form.addEventListener ('submit', (e) => {
-            let valid;
-            const wrongFilled = [];
-            for (const [value, rules] of map) {
-                if (value instanceof Array
-                || value instanceof HTMLCollection
-                || value instanceof NodeList) {
-                    const nonMatched = Array.from(value)
-                        .filter(item => !validate(item, rules));
-                    if (nonMatched.length > 0) {
-                        wrongFilled.push(nonMatched);
-                        valid = false;
-                    }
+    validInputs() {
+        const isIterable = value => (
+            value instanceof Array
+            || value instanceof HTMLCollection
+            || value instanceof NodeList
+        );
+        return Array.from(this.map)
+            .filter(([value]) => isIterable(value) || (value instanceof Element))
+            .map(([value, rules]) => [(isIterable(value) ? Array.from(value) : value), rules])
+            .map(([value, rules]) => {
+                if (isIterable(value)) {
+                    const [errors] = value
+                        .map(input => this.validate(input, rules));
+                    return errors;
                 }
-                if (value instanceof Element
-                || value instanceof HTMLElement) {
-                    if (!validate (value, rules)) {
-                        wrongFilled = value;
-                        valid = false;
+                return this.validate(value, rules);
+            })
+            .reduce((errors, error) => [...errors, ...error], []);
+    }
 
-                    }
-                }
-            }
-            if (valid === false) {
-                e.preventDefault ();
+    bindEvents(rejected) {
+        this.form.addEventListener('submit', (e) => {
+            const wrongFilled = this.validInputs();
+            if (wrongFilled.length > 0) {
+                e.preventDefault();
+                this.eventListener.notifyReject(wrongFilled);
                 rejected(wrongFilled);
-                return false;
+            } else {
+                if (this.config.alwaysCancelSubmit) {
+                    e.preventDefault();
+                    this.eventListener.notifySuccess();
+                }
             }
         });
     }
+
 }
