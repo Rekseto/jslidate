@@ -16,26 +16,37 @@
     <input type="text" class="input_2" id="example2">
 
     <input type="submit" value="submit">
+    <output id="output"></output>
 </form>
 
 <script src="../dist/jslidate.js"></script>
 <script>
     // tests
-    const minLength = length => value => value.length >= length;
-    const maxLength = length => value => value.length <= length;
+    const minLength = (length, pattern = length) => value => ({
+        validate: value.length >= length,
+        message: ['Minimal length', pattern],
+    });
+    const maxLength = (length, pattern = length) => value => ({
+        validate: value.length <= length,
+        message: ['Maximal length', pattern],
+    });
 
-    const impForm = new JSLidate ({
+    const patternRule = (regexObj, pattern = regexObj) => value => ({ 
+        validate: regexObj.test(value),
+        message: ['Field should match pattern', pattern],
+    });
+
+    const impForm = new JSLidate({
         inputs: [{
             selector: '.input_1' ,
-            rules   : [minLength (1) , maxLength (5)] ,
+            rules   : [minLength (1), maxLength (5)] ,
         }, {
             selector: '.input_2' ,
-            rules   : [minLength (2) , maxLength (4)] ,
-        }],
-        form:{
+            rules   : [minLength (2), maxLength (4), patternRule(/[a-b]/img, 'a-b alphanumeric')] ,
+        }], form: {
             selector: '.form',
         }
-    }, (wrongFilled) => console.log(wrongFilled));
+    }, (wrongFilled) => document.getElementById('output').innerText = wrongFilled);
 </script>
 </body>
 </html>
