@@ -1,3 +1,4 @@
+import EventListener from './eventListener';
 export default class Form {
     /**
      * Form constructor
@@ -7,7 +8,7 @@ export default class Form {
      * @param {Function} rejected - function to call after reject
      * @memberof Form
      */
-    constructor({ inputs, form }, rejected = () => {}) {
+    constructor({ inputs, form }, rejected = () => {}, config = {alwaysCancelSubmit : true}) {
         const map = new Map ();
         const formNode = document.querySelector(form.selector);
         Array.from(inputs)
@@ -16,11 +17,14 @@ export default class Form {
                 map.set(formNode.querySelectorAll(selector), rules));
 
         this.map = map;
+        this.config = config;
         this.form = formNode;
+        this.eventListener = new EventListener();
         this.bindEvents(rejected);
     }
 
     validate({ value }, rules) {
+
         return rules
             .map(rule => rule(value))
             .filter(({ validate }) => !validate)
@@ -34,7 +38,6 @@ export default class Form {
             || value instanceof HTMLCollection
             || value instanceof NodeList
         );
-        
         return Array.from(this.map)
             .filter(([value]) => isIterable(value) || (value instanceof Element))
             .map(([value, rules]) => [(isIterable(value) ? Array.from(value) : value), rules])
@@ -54,8 +57,15 @@ export default class Form {
             const wrongFilled = this.validInputs();
             if (wrongFilled.length > 0) {
                 e.preventDefault();
+                this.eventListener.notifyReject(wrongFilled);
                 rejected(wrongFilled);
+            } else {
+                if (this.config.alwaysCancelSubmit) {
+                    e.preventDefault();
+                    this.eventListener.notifySuccess();
+                }
             }
         });
     }
+
 }
