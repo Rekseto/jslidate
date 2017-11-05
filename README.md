@@ -11,7 +11,7 @@ const impForm = new JSLidate ({
         rules   : [minLength (1) , maxLength (5)] ,
     }, {
         selector: '.input_2' ,
-        rules   : [minLength (2) , maxLength (19)] ,
+        rules   : [minLength (2) , maxLength (4), patternRule(/[a-b]/img, 'a-b alphanumeric')] ,
     }],
     form:{
         selector: '.form',
@@ -26,11 +26,17 @@ Example:
 
 ```javascript
 // ES6
-const maxLength = length => value => value.length <= length;
+const minLength = (length, pattern = length) => value => ({
+    validate: value.length >= length,
+    message: ['Minimal length', pattern],
+});
 // ES5
-var maxLenth = function(length) {
+var maxLenth = function(length, pattern) {
     return function(value) {
-        return value.length <= length;
+        return {
+            validate: value.length <= length,
+            message: ['Minimal length', pattern || length]
+        };
     }
 }
 ```

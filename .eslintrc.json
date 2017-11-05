@@ -6,12 +6,18 @@
     "parser": "babel-eslint",
     "extends": "eslint:recommended",
     "rules": {
-        "indent": ["warn", 4],
+        "indent": ["error", 4],
         "quotes": ["error", "single"],
         "semi": ["error", "always"],
         "no-console": ["warn"],
         "keyword-spacing": ["error", { "after": true }],
         "space-in-parens": ["error", "never"],
-        "comma-spacing": ["error", { "before": false, "after": true }]
+        "comma-spacing": ["error", { "before": false, "after": true }],
+        "space-before-function-paren": ["error", {
+            "anonymous": "never",
+            "named": "never",
+            "asyncArrow": "always"
+        }],
+        "new-parens": ["error"]
     }
 }
