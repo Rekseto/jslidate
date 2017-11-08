@@ -1,56 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>jslidate</title>
 </head>
+
 <body>
 
 
-<form action="#" method="get" class="form">
+    <form action="#" method="get" class="form">
 
-    <label for="example1">First example (min 1, max 5)</label>
-    <input type="text" id="example1" class="input_1">
+        <label for="example1">First example (min 1, max 5)</label>
+        <input type="text" id="example1" class="input_1">
 
-    <label for="example2">Second example (min 2, max 4)</label>
-    <input type="text" class="input_2" id="example2">
+        <label for="example2">Second example (min 2, max 4)</label>
+        <input type="text" class="input_2" id="example2">
 
-    <input type="submit" value="submit">
-    <output id="output"></output>
-</form>
+        <input type="submit" value="submit">
+        <output id="output"></output>
+    </form>
 
-<script src="../dist/jslidate.js"></script>
-<script>
-    // tests
-    const minLength = (length, pattern = length) => value => ({
-        validate: value.length >= length,
-        message: ['Minimal length', pattern],
-    });
-    const maxLength = (length, pattern = length) => value => ({
-        validate: value.length <= length,
-        message: ['Maximal length', pattern],
-    });
+    <script src="../dist/jslidate.js"></script>
+    <script>
+        // tests
+        const minLength = (length, pattern = length) => value => ({
+            validate: value.length >= length,
+            message: ['Minimal length', pattern],
+        });
+        const maxLength = (length, pattern = length) => value => ({
+            validate: value.length <= length,
+            message: ['Maximal length', pattern],
+        });
 
-    const patternRule = (regexObj, pattern = regexObj) => value => ({ 
-        validate: regexObj.test(value),
-        message: ['Field should match pattern', pattern],
-    });
+        const patternRule = (regexObj, pattern = regexObj) => value => ({
+            validate: regexObj.test(value),
+            message: ['Field should match pattern', pattern],
+        });
 
-    const impForm = new JSLidate({
-        inputs: [{
-            selector: '.input_1' ,
-            rules   : [minLength (1), maxLength (5)] ,
-        }, {
-            selector: '.input_2' ,
-            rules   : [minLength (2), maxLength (4), patternRule(/[a-b]/img, 'a-b alphanumeric')] ,
-        }],
-         form: {
-            selector: '.form',
-        },
-        rejected : (wrongFilled) => document.getElementById('output').innerText = wrongFilled,
-        config : {alwaysCancelSubmit : false}
-    });
-    console.log(impForm.eventListener);
-</script>
+        const impForm = new JSLidate({
+            inputs: [{
+                selector: '.input_1',
+                rules: [minLength(1), maxLength(5)],
+            }, {
+                selector: '.input_2',
+                rules: [minLength(2), maxLength(4), patternRule(/[a-b]/img, 'a-b alphanumeric')],
+            }],
+            form: {
+                selector: '.form',
+            },
+            rejected: (wrongFilled) => document.getElementById('output').innerText = wrongFilled,
+            config: { alwaysCancelSubmit: false }
+        });
+        console.log(impForm.eventListener);
+    </script>
 </body>
+
 </html>

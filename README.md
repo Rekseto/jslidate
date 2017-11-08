@@ -8,16 +8,16 @@ Code below creates Form object
     const impForm = new JSLidate({
         inputs: [{
             selector: '.input_1' ,
-            rules   : [minLength (1), maxLength (5)] ,
+            rules: [minLength (1), maxLength (5)] ,
         }, {
             selector: '.input_2' ,
-            rules   : [minLength (2), maxLength (4), patternRule(/[a-b]/img, 'a-b alphanumeric')] ,
+            rules: [minLength (2), maxLength (4), patternRule(/[a-b]/img, 'a-b alphanumeric')] ,
         }],
          form: {
             selector: '.form',
         },
-        rejected : (wrongFilled) => document.getElementById('output').innerText = wrongFilled,
-        config : {alwaysCancelSubmit : false}
+        rejected: (wrongFilled) => document.getElementById('output').innerText = wrongFilled,
+        config: {alwaysCancelSubmit : false}
     });
 ```
 ## API
