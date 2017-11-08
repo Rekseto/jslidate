@@ -1,6 +1,4 @@
 export default class EventListener {
-    
-    
         constructor() {
             this.observers = [];
         }
@@ -18,15 +16,12 @@ export default class EventListener {
         }
     
         notifySuccess() {
-            for (let i=0; i < this.observers.length; i++){
-                this.observers[i].success();
-            }
+            this.observers.forEach(observer => observer.success());
         }
     
         notifyReject() {
-            for (let i=0; i < this.observers.length; i++){
-                this.observers[i].reject();
-            }
+            this.observers.forEach(observer => observer.reject());
         }
         
     }
+    

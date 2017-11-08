@@ -8,7 +8,7 @@ export default class Form {
      * @param {Function} rejected - function to call after reject
      * @memberof Form
      */
-    constructor({ inputs, form }, rejected = () => {}, config = {alwaysCancelSubmit : true}) {
+    constructor({ inputs, form, rejected = () => {}, config = {alwaysCancelSubmit : true} }) {
         const map = new Map ();
         const formNode = document.querySelector(form.selector);
         Array.from(inputs)
@@ -59,12 +59,10 @@ export default class Form {
                 e.preventDefault();
                 this.eventListener.notifyReject(wrongFilled);
                 rejected(wrongFilled);
-            } else {
-                if (this.config.alwaysCancelSubmit) {
+            } else if (this.config.alwaysCancelSubmit) {
                     e.preventDefault();
                     this.eventListener.notifySuccess();
                 }
-            }
         });
     }
 
