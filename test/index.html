@@ -43,10 +43,14 @@
         }, {
             selector: '.input_2' ,
             rules   : [minLength (2), maxLength (4), patternRule(/[a-b]/img, 'a-b alphanumeric')] ,
-        }], form: {
+        }],
+         form: {
             selector: '.form',
-        }
-    }, (wrongFilled) => document.getElementById('output').innerText = wrongFilled);
+        },
+        rejected : (wrongFilled) => document.getElementById('output').innerText = wrongFilled,
+        config : {alwaysCancelSubmit : false}
+    });
+    console.log(impForm.eventListener);
 </script>
 </body>
 </html>

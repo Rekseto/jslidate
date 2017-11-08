@@ -8,12 +8,12 @@ export default class Form {
      * @param {Function} rejected - function to call after reject
      * @memberof Form
      */
-    constructor({ inputs, form, rejected = () => {}, config = {alwaysCancelSubmit : true} }) {
-        const map = new Map ();
+    constructor({ inputs, form, rejected = () => { }, config = { alwaysCancelSubmit: true } }) {
+        const map = new Map();
         const formNode = document.querySelector(form.selector);
         Array.from(inputs)
-            .map(({ selector, rules }) => [ selector, rules ])
-            .forEach(([ selector, rules ]) =>
+            .map(({ selector, rules }) => [selector, rules])
+            .forEach(([selector, rules]) =>
                 map.set(formNode.querySelectorAll(selector), rules));
 
         this.map = map;
@@ -46,23 +46,23 @@ export default class Form {
                     const [errors] = value
                         .map(input => this.validate(input, rules));
                     return errors;
-                }                
-                return this.validate (value, rules);
+                }
+                return this.validate(value, rules);
             })
             .reduce((errors, error) => [...errors, ...error], []);
     }
 
     bindEvents(rejected) {
-        this.form.addEventListener ('submit', (e) => {
+        this.form.addEventListener('submit', (e) => {
             const wrongFilled = this.validInputs();
             if (wrongFilled.length > 0) {
                 e.preventDefault();
                 this.eventListener.notifyReject(wrongFilled);
                 rejected(wrongFilled);
             } else if (this.config.alwaysCancelSubmit) {
-                    e.preventDefault();
-                    this.eventListener.notifySuccess();
-                }
+                e.preventDefault();
+                this.eventListener.notifySuccess();
+            }
         });
     }
 
