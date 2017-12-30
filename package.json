@@ -23,8 +23,5 @@
     "rollup-plugin-eslint": "^4.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.1.0"
-  },
-  "dependencies": {
-    "password-hash-and-salt": "^0.1.4"
   }
 }
